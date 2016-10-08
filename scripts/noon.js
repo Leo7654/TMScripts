@@ -18,11 +18,29 @@
     }
     var idx = getIdx();
     $.post('http://noondate.com/v2/dialogs/user_impression', {idx:idx, gender:1}, function(res){
-        if (res.indexOf('이미 평가한') > 0) {
+        if (res.indexOf('이미 평가한') > 0 || res.indexOf('제한시간') > 0) {
             console.debug('이미평가');
         } else {
             console.debug('아직평가');
+            const params = {
+                gender:0,
+                idx:idx,
+                'impression[appearance]': 5,
+                'impression[carrer]': 0,
+                'impression[story]': 0,
+            };
+            const res = api.call('api/user_impression', params, null);
+            console.debug(res);
         }
+    });
+
+    $('a[href^="javascript: select"]').each(function(index){
+        const idx = this.href.match(/javascript: select\( (\d+),(\d+), false \)/)[1];
+        const other_idx = 1;//this.href.match(/javascript: select\( (\d+),(\d+), false \)/)[2];
+        console.debug('select('+idx+', '+0+', false)');
+        api.call('api/card_select', {idx: idx, other_idx : other_idx, theme : false }, function(res) {
+            location.href = "http://noondate.com/v2/cards/" + idx;
+        });
     });
 
     // Your code here...
