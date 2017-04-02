@@ -43,5 +43,13 @@
         });
     });
 
+    $('a[href^="javascript: api.dialog(\'select_more\'').each(function(index){
+        const idx = this.href.match(/javascript: api\.dialog\(\'select_more\', \{idx: (\d+) \}/)[1];
+        const other_idx = 1;
+        console.debug('select('+idx+', '+0+', false)');
+        api.call('api/card_select', {idx: idx, other_idx : other_idx, theme : false }, function(res) {
+            location.href = "http://noondate.com/v2/cards/" + idx;
+        });
+    });
     // Your code here...
 })();
